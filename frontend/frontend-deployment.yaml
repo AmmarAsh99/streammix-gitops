@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: angular-container
-          image: ammaralshari/streammix-frontend:48352bfdecb458a9e91f742f0ed3c45459e83c5c
+          image: ammaralshari/streammix-frontend:82297c50b3b9a87db460a192e12b5b9cfbaaa024
           imagePullPolicy: Always
           ports:
             - containerPort: 80
