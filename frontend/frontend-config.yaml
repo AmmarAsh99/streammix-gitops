@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: frontend-config
 data:
-  ANGULAR_URL: http://localhost:4200
+  ANGULAR_URL: http://steammix.com
