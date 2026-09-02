@@ -1,0 +1,8 @@
+FROM ubuntu:24.04
+
+RUN dd if=/dev/urandom \
+    of=/large-test-file.bin \
+    bs=1M \
+    count=2560
+
+CMD ["echo", "Heavy Docker image test"]
