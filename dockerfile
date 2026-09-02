@@ -1,8 +1,3 @@
-# Use the official NGINX image as the base
-FROM nginx:latest
+FROM alpine:3.20
 
-# Copy custom static HTML files into the default NGINX public folder
-COPY ./html /usr/share/nginx/html
-
-# Expose port 80 to the outside world
-EXPOSE 80
+CMD ["echo", "Hello from my test Docker image"]
