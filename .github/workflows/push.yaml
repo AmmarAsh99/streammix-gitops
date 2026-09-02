@@ -87,8 +87,10 @@ jobs:
 
       - name: Upload Summary
         run: |
-          echo "### ✅ Image uploaded successfully" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- Image: \`$IMAGE_NAME:${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- TAR: \`$TAR_NAME-${{ github.sha }}.tar\`" >> $GITHUB_STEP_SUMMARY
-          echo "- MinIO: \`s3://$MINIO_BUCKET/$MINIO_DIR/$TAR_NAME-${{ github.sha }}.tar\`" >> $GITHUB_STEP_SUMMARY
+          cat >> "$GITHUB_STEP_SUMMARY" <<EOF
+          ### ✅ Image uploaded successfully
+      
+          - **Image:** \`$IMAGE_NAME:${{ github.sha }}\`
+          - **TAR:** \`$TAR_NAME-${{ github.sha }}.tar\`
+          - **MinIO:** \`s3://$MINIO_BUCKET/$MINIO_DIR/$TAR_NAME-${{ github.sha }}.tar\`
+          EOF
