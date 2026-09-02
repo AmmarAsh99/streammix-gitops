@@ -15,8 +15,8 @@ spec:
         app: nest
     spec:
       containers:
-        - name: nest-container
-          image: ammaralshari/streammix-backend:a4f3f8b377772392a7439b4c073589400ae36058
+        - name: nest-container-ready
+          image: ammaralshari/streammix-backend:9519c4dd4b194e9e12b002bb97112919c3d10b51
           ports:
             - containerPort: 3000
           envFrom:
@@ -32,6 +32,13 @@ spec:
                 configMapKeyRef:
                   name: frontend-config
                   key: ANGULAR_URL
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "150Mi"
+              cpu: "500m"
 ---
 apiVersion: v1
 kind: Service

@@ -1,0 +1,76 @@
+name: Build and Upload Image to MinIO
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+
+    env:
+      IMAGE_NAME: dockerfile
+      MINIO_ENDPOINT: https://minio-api.bab-poc.sa.focal.mozn.sa
+      MINIO_BUCKET: docker-images
+
+    steps:
+
+      # 1. Get repository code
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2. Build Docker image
+      - name: Build Docker image
+        run: |
+          docker build -t $IMAGE_NAME:${{ github.sha }} .
+
+      # 3. Save Docker image as tar
+      - name: Save Docker image
+        run: |
+          docker save \
+            $IMAGE_NAME:${{ github.sha }} \
+            -o $IMAGE_NAME.tar
+
+          ls -lh $IMAGE_NAME.tar
+
+      # 4. Install AWS CLI
+      - name: Install AWS CLI
+        run: |
+          curl -fsSL https://awscli.amazonaws.com/v2/install.sh | bash
+
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      # 5. Configure MinIO profile
+      - name: Configure MinIO
+        run: |
+          aws configure set aws_access_key_id \
+            "Admin" \
+            --profile minio
+
+          aws configure set aws_secret_access_key \
+            "MoznPass123123" \
+            --profile minio
+
+          aws configure set region us-east-1 \
+            --profile minio
+
+          aws configure set s3.addressing_style path \
+            --profile minio
+
+      # 6. Test with SMALL file first
+      - name: Test MinIO upload
+        run: |
+          echo "GitHub Actions MinIO test" > test.txt
+
+          aws s3 cp test.txt \
+            s3://$MINIO_BUCKET/test.txt \
+            --endpoint-url "$MINIO_ENDPOINT" \
+            --profile minio
+
+      # 7. Upload Docker image
+      - name: Upload image to MinIO
+        run: |
+          aws s3 cp $IMAGE_NAME.tar \
+            s3://$MINIO_BUCKET/$IMAGE_NAME-${{ github.sha }}.tar \
+            --endpoint-url "$MINIO_ENDPOINT" \
+            --profile minio \
+            --no-progress
