@@ -79,7 +79,7 @@ jobs:
         run: |
           aws s3 cp \
             $TAR_NAME-${{ github.sha }}.tar \
-            s3://$MINIO_BUCKET/$MINIO_DIR/$TAR_NAME-${{ github.sha }}.tar \
+            s3://$MINIO_BUCKET/$TAR_NAME-${{ github.sha }}.tar \
             --endpoint-url "$MINIO_ENDPOINT" \
             --profile minio \
             --no-progress
@@ -92,5 +92,5 @@ jobs:
       
           - **Image:** \`$IMAGE_NAME:${{ github.sha }}\`
           - **TAR:** \`$TAR_NAME-${{ github.sha }}.tar\`
-          - **MinIO:** \`s3://$MINIO_BUCKET/$MINIO_DIR/$TAR_NAME-${{ github.sha }}.tar\`
+          - **MinIO:** \`s3://$MINIO_BUCKET/$TAR_NAME-${{ github.sha }}.tar\`
           EOF
